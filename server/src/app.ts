@@ -7,6 +7,7 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+import userRouter from "../routes/user.route";
 import instanceMongoDB from "./database/init.mongodb";
 import {
   countConectionDB,
@@ -35,6 +36,9 @@ instanceMongoDB.connect();
 overloadConectionDB();
 countConectionDB();
 
+
+//routes
+app.use("/api/v1",userRouter);
 
 
 //test api

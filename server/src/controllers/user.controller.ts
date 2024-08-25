@@ -2,11 +2,13 @@
 import { Request, Response, NextFunction } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
-import userModel from "../models/user.model";
+import userModel, { IUser }  from "../models/user.model";
 import jwt from "jsonwebtoken";
+import { Secret } from 'jsonwebtoken';
 import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendEmail";
+require("dotenv").config();
 
 // Register user
 interface IRegistrationBody {
