@@ -38,6 +38,3 @@ const appConfig: IConfig = {
 
 const env = process.env.NODE_ENV || "dev";
 export default appConfig[env];
-
-
-
