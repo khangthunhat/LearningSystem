@@ -1,6 +1,6 @@
 "use strict";
 
-interface Config {
+interface IConfig {
   [key: string]: {
     app: {
       port: string | number;
@@ -13,7 +13,7 @@ interface Config {
   };
 }
 
-const appConfig: Config = {
+const appConfig: IConfig = {
   dev: {
     app: {
       port: process.env.DEV_APP_PORT || 8000,
