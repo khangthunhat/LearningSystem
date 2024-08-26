@@ -7,12 +7,13 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-import userRouter from "../routes/user.route";
+import userRouter from "../src/routes/user.route";
 import instanceMongoDB from "./database/init.mongodb";
 import {
   countConectionDB,
   overloadConectionDB,
 } from "./helpers/check.connectionDB";
+import { ErrorMiddleware } from "./middleware/Error";
 
 //init middlewares
 const app = express();
@@ -40,6 +41,8 @@ countConectionDB();
 //routes
 app.use("/api/v1",userRouter);
 
+//error middleware
+app.use(ErrorMiddleware);
 
 //test api
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
@@ -55,5 +58,6 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   err.statusCode = 404;
   next(err);
 });
+
 
 export default app;
