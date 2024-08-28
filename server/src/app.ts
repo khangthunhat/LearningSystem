@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import userRouter from "../src/routes/user.route";
+import courseRouter from "./routes/course.route";
 import instanceMongoDB from "./database/init.mongodb";
 import {
   countConectionDB,
@@ -34,12 +35,13 @@ app.use(
 
 //init Database
 instanceMongoDB.connect();
-overloadConectionDB();
-countConectionDB();
+// overloadConectionDB();
+// countConectionDB();
 
 
 //routes
 app.use("/api/v1",userRouter);
+app.use("/api/v1",courseRouter);
 
 //error middleware
 app.use(ErrorMiddleware);

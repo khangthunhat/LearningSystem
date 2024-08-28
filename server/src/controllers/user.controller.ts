@@ -1,6 +1,6 @@
 "use strict";
 
-require("dotenv").config();
+import dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
 import userModel, { IUser } from "../models/user.model";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -17,6 +17,8 @@ import {
 import { getUserById } from "../services/user.service";
 import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
+
+dotenv.config();
 
 // Register user
 interface IRegistrationBody {
@@ -90,7 +92,7 @@ export const registrationUser = CatchAsyncError(
       try {
         await sendMail({
           email: user.email,
-          subject: "Thư mời dự lễ tốt nghiệp",
+          subject: "Activate your account",
           template: "activation-mail.ejs",
           data,
         });
@@ -168,7 +170,7 @@ export const activateUser = CatchAsyncError(
         user,
       });
     } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   }
 );
@@ -197,7 +199,7 @@ export const loginUser = CatchAsyncError( async (req: Request, res: Response, ne
 
     sendToken(user, 200, res);
   } catch (error: any) {
-    return next(new ErrorHandler(error.message, 400));
+    return next(new ErrorHandler(error.message, 500));
   }
 });
 
@@ -213,7 +215,7 @@ export const logoutUser = CatchAsyncError(
         message: "Logged out successfully",
       });
     } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   }
 );
@@ -264,7 +266,7 @@ export const updateAccessToken = CatchAsyncError(
         accessToken,
       });
     } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   }
 );
@@ -276,7 +278,7 @@ export const getUserInfo = CatchAsyncError(
       const userId = req.user?._id;
       getUserById(userId as string, res);
     } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   }
 );
