@@ -1,5 +1,11 @@
 import express from "express";
-import { editCourse, uploadCourse } from "../controllers/course.controller";
+import {
+  editCourse,
+  getSingleCourse,
+  uploadCourse,
+  getAllCourse,
+  getCourseByUser,
+} from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 const courseRouter = express.Router();
 
@@ -11,10 +17,16 @@ courseRouter.post(
 );
 
 courseRouter.put(
-    "/edit-course/:id",
-    // isAutheticated,
-    // authorizeRoles("admin"),
-    editCourse
-  );
+  "/edit-course/:id",
+  isAutheticated,
+  authorizeRoles("admin"),
+  editCourse
+);
 
-export default courseRouter; 
+courseRouter.get("/get-course/:id", getSingleCourse);
+
+courseRouter.get("/get-courses", getAllCourse);
+
+courseRouter.get("/get-courses-content/:id", isAutheticated, getCourseByUser);
+
+export default courseRouter;
