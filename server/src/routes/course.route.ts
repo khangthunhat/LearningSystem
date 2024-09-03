@@ -5,6 +5,10 @@ import {
   uploadCourse,
   getAllCourse,
   getCourseByUser,
+  addQuestion,
+  addAnswer,
+  addReview,
+  addReplyToReview,
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 const courseRouter = express.Router();
@@ -29,4 +33,16 @@ courseRouter.get("/get-courses", getAllCourse);
 
 courseRouter.get("/get-courses-content/:id", isAutheticated, getCourseByUser);
 
+courseRouter.put("/add-question", isAutheticated, addQuestion);
+
+courseRouter.put("/add-answer", isAutheticated, addAnswer);
+
+courseRouter.put("/add-review/:id", isAutheticated, addReview);
+
+courseRouter.put(
+  "/add-reply",
+  isAutheticated,
+  authorizeRoles("admin"),
+  addReplyToReview
+);
 export default courseRouter;

@@ -19,19 +19,24 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
     "cloudinary-core": "^2.13.1",
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "helmet": "^7.1.0",
     "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.4",
+    "morgan": "^1.10.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.5",
     "@types/ejs": "^3.1.5",
+    "@types/morgan": "^1.9.9",
     "nodemailer": "^6.9.14"
   }
 }
