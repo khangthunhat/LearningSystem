@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+</head>
+<body>
+
+    <h1>Order Confirmation</h1>
+    <p>Dear <%= order.name %>,</p>
+    <p>Thank you for your purchase. Your order has been confirmed.</p>
+    <p>Order ID: <%= order.id %></p>
+    <p>Order Date: <%= order.date %></p>
+    <p>Order Price: <%= order.price %></p>
+    <p>Order Status: <%= order.status %></p>
+    <p>Order Items: <%= order.items.map(item => item.name).join(", ") %></p>
+    
+</body>
+</html>
