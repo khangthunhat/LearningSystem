@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { redis } from "../utils/redis";
-
+import  UserModel  from "../models/user.model";
 //get user by id
 export const getUserById = async (id: string, res: Response) => {
   const userJson = await redis.get(id);
@@ -11,4 +11,13 @@ export const getUserById = async (id: string, res: Response) => {
       user,
     });
   }
+};
+
+//Get all users -- only for admin
+export const getAllUsersService = async (res: Response) => {
+  const users = await UserModel.find().sort({ createdAt: -1 });
+  res.status(200).json({
+    success: true,
+    users,
+  });
 };

@@ -9,6 +9,7 @@ import {
   addAnswer,
   addReview,
   addReplyToReview,
+  getAllCourses,
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 const courseRouter = express.Router();
@@ -45,4 +46,6 @@ courseRouter.put(
   authorizeRoles("admin"),
   addReplyToReview
 );
+
+courseRouter.get("/get-all-courses", isAutheticated, authorizeRoles("admin"), getAllCourses);
 export default courseRouter;

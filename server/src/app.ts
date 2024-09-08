@@ -10,6 +10,8 @@ import cors from "cors";
 import userRouter from "../src/routes/user.route";
 import courseRouter from "./routes/course.route";
 import orderRouter from "./routes/order.route";
+import notificationRouter from "./routes/notification.route";
+
 import instanceMongoDB from "./database/init.mongodb";
 import {
   countConectionDB,
@@ -39,11 +41,8 @@ instanceMongoDB.connect();
 // overloadConectionDB();
 // countConectionDB();
 
-
 //routes
-app.use("/api/v1",userRouter);
-app.use("/api/v1",courseRouter);
-app.use("/api/v1",orderRouter); 
+app.use("/api/v1", userRouter, courseRouter, orderRouter, notificationRouter);
 
 //error middleware
 app.use(ErrorMiddleware);
@@ -62,6 +61,5 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   err.statusCode = 404;
   next(err);
 });
-
 
 export default app;

@@ -11,3 +11,11 @@ export const createCourse = CatchAsyncError(async (data: any, res:Response)=>{
     });
 });
 
+//Get all course -- only for admin
+export const getAllCourseService = async (res: Response) => {
+    const course = await courseModel.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      course,
+    });
+  };

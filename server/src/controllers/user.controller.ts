@@ -15,6 +15,7 @@ import {
   sendToken,
 } from "../utils/jwt";
 import { getUserById } from "../services/user.service";
+import { getAllUsersService } from "../services/user.service";
 import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
 
@@ -111,8 +112,6 @@ export const registrationUser = CatchAsyncError(
   }
 );
 
-
-
 export const createActivationToken = (
   user: IRegistrationBody
 ): IActivationToken => {
@@ -133,7 +132,6 @@ export const createActivationToken = (
 };
 
 //activate user
-
 
 export const activateUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -175,33 +173,35 @@ export const activateUser = CatchAsyncError(
   }
 );
 
-export const loginUser = CatchAsyncError( async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { email, password } = req.body as ILoginRequest;
+export const loginUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body as ILoginRequest;
 
-    if (!email || !password) {
-      return next(
-        new ErrorHandler("Please enter your email or password", 400)
-      );
+      if (!email || !password) {
+        return next(
+          new ErrorHandler("Please enter your email or password", 400)
+        );
+      }
+
+      const user = await userModel.findOne({ email }).select("+password");
+
+      if (!user) {
+        return next(new ErrorHandler("Invalid email or password", 401));
+      }
+
+      const isPasswordMatched = await user.comparePassword(password);
+
+      if (!isPasswordMatched) {
+        return next(new ErrorHandler("Invalid email or password", 401));
+      }
+
+      sendToken(user, 200, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
     }
-
-    const user = await userModel.findOne({ email }).select("+password");
-
-    if (!user) {
-      return next(new ErrorHandler("Invalid email or password", 401));
-    }
-
-    const isPasswordMatched = await user.comparePassword(password);
-
-    if (!isPasswordMatched) {
-      return next(new ErrorHandler("Invalid email or password", 401));
-    }
-
-    sendToken(user, 200, res);
-  } catch (error: any) {
-    return next(new ErrorHandler(error.message, 500));
   }
-});
+);
 
 export const logoutUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -283,8 +283,6 @@ export const getUserInfo = CatchAsyncError(
   }
 );
 
-
-
 //social Auth
 export const socialAuth = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -302,7 +300,6 @@ export const socialAuth = CatchAsyncError(
     }
   }
 );
-
 
 export const updateUserInfo = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -375,7 +372,6 @@ export const updateUserPassword = CatchAsyncError(
   }
 );
 
-
 export const updateProfilePicture = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -413,6 +409,17 @@ export const updateProfilePicture = CatchAsyncError(
         message: "Update picture profile successfully",
         user,
       });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+//Get all users -- only for admin
+export const getAllUsers = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllUsersService(res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }

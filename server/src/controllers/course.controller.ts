@@ -6,10 +6,10 @@ import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendEmail";
 import { redis } from "../utils/redis";
-import { createCourse } from "../services/course.service";
+import { createCourse, getAllCourseService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import mongoose from "mongoose";
-
+import NotificationModel from "../models/notification.model";
 //upload course
 export const uploadCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -204,6 +204,12 @@ export const addQuestion = CatchAsyncError(
       //add this question to our course content
       courseContent.questions.push(newQuestion);
 
+      await NotificationModel.create({
+        title: "New Question Received",
+        message: `${req.user?.name} has asked a question in ${courseContent.title}`,
+        status: "unread",
+      });
+
       //save course
       await course?.save();
       res.status(201).json({
@@ -267,6 +273,12 @@ export const addAnswer = CatchAsyncError(
 
       if (req.user?._id !== question.user._id) {
         //create notification
+        await NotificationModel.create({
+          user: req.user?._id,
+          title: "New Answer Received",
+          message: `${req.user?.name} has answered a question in ${courseContent.title}`,
+          status: "unread",
+        });
       } else {
         const data = {
           name: question.user.name,
@@ -416,6 +428,18 @@ export const addReplyToReview = CatchAsyncError(
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+
+//Get all course -- only for admin
+export const getAllCourses = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllCourseService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 );
