@@ -9,6 +9,7 @@ import cors from "cors";
 
 import userRouter from "../src/routes/user.route";
 import courseRouter from "./routes/course.route";
+import orderRouter from "./routes/order.route";
 import instanceMongoDB from "./database/init.mongodb";
 import {
   countConectionDB,
@@ -42,6 +43,7 @@ instanceMongoDB.connect();
 //routes
 app.use("/api/v1",userRouter);
 app.use("/api/v1",courseRouter);
+app.use("/api/v1",orderRouter); 
 
 //error middleware
 app.use(ErrorMiddleware);

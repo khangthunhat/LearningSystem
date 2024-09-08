@@ -4,17 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; }
+        .order-details { background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 5px; padding: 15px; margin-top: 20px; }
+        .order-items { margin-top: 20px; }
+        .item { margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-
     <h1>Order Confirmation</h1>
     <p>Dear <%= order.name %>,</p>
     <p>Thank you for your purchase. Your order has been confirmed.</p>
-    <p>Order ID: <%= order.id %></p>
-    <p>Order Date: <%= order.date %></p>
-    <p>Order Price: <%= order.price %></p>
-    <p>Order Status: <%= order.status %></p>
-    <p>Order Items: <%= order.items.map(item => item.name).join(", ") %></p>
     
+    <div class="order-details">
+        <p><strong>Order ID:</strong> <%= order._id %></p>
+        <p><strong>Order Date:</strong> <%= order.date %></p>
+        <p><strong>Course Name:</strong> <%= order.courseName %></p>
+        <p><strong>Order Total:</strong> $<%= typeof order.price === 'number' ? order.price.toFixed(2) : order.price %></p>
+    </div>
+    
+    <p>If you have any questions about your order, please don't hesitate to contact our customer support.</p>
+    <p>Thank you for choosing our course!</p>
 </body>
 </html>
