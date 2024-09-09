@@ -1,3 +1,5 @@
+"use strict";
+
 import { Response } from "express";
 import courseModel from "../models/course.model";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
@@ -19,3 +21,14 @@ export const getAllCourseService = async (res: Response) => {
       course,
     });
   };
+
+//delete course -- only for admin
+export const deleteCourseService = async (id: string, res: Response) => {
+  const course = await courseModel.findByIdAndDelete(id);
+  res.status(200).json({
+    success: true,
+    message: "Course deleted successfully",
+    course,
+  });
+};
+

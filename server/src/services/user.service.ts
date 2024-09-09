@@ -1,3 +1,5 @@
+"use strict";
+
 import { Response } from "express";
 import { redis } from "../utils/redis";
 import  UserModel  from "../models/user.model";
@@ -19,5 +21,24 @@ export const getAllUsersService = async (res: Response) => {
   res.status(200).json({
     success: true,
     users,
+  });
+};
+
+//Update user role -- only for admin
+export const updateUserRoleService = async (id: string, role: string, res: Response) => {
+  const user = await UserModel.findByIdAndUpdate(id, { role }, { new: true });
+  res.status(200).json({
+    success: true,
+    user,
+  });
+};
+
+//delete user -- only for admin
+export const deleteUserService = async (id: string, res: Response) => {
+  const user = await UserModel.findByIdAndDelete(id);
+  res.status(200).json({
+    success: true,
+    message: "User deleted successfully",
+    user,
   });
 };

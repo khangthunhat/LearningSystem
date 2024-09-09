@@ -1,3 +1,5 @@
+"use strict";
+
 import { NextFunction, Request, Response } from "express";
 import NotificationModel from "../models/notification.model";
 import { CatchAsyncError } from "../middleware/catchAsyncError";

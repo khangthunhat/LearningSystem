@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,5 +26,99 @@
     
     <p>If you have any questions about your order, please don't hesitate to contact our customer support.</p>
     <p>Thank you for choosing our course!</p>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.8; 
+            color: #333; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background-color: #f0f4f8; 
+        }
+        h1 { 
+            color: #2980b9; 
+            font-size: 24px; 
+        }
+        p { 
+            font-size: 16px; 
+        }
+        .order-details { 
+            background-color: #ffffff; 
+            border: 1px solid #dcdcdc; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-top: 20px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+        }
+        .order-details p { 
+            margin: 10px 0; 
+        }
+        .order-details strong { 
+            color: #2c3e50; 
+        }
+        .order-items { 
+            margin-top: 20px; 
+            background-color: #f9fafb; 
+            border-radius: 5px; 
+            padding: 15px; 
+            border: 1px solid #e1e4e8; 
+        }
+        .item { 
+            padding: 10px 0; 
+            border-bottom: 1px solid #e9ecef; 
+        }
+        .item:last-child { 
+            border-bottom: none; 
+        }
+        .footer { 
+            margin-top: 30px; 
+            font-size: 14px; 
+            color: #7f8c8d; 
+            text-align: center; 
+        }
+        .btn { 
+            display: inline-block; 
+            background-color: #3498db; 
+            color: #fff; 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            margin-top: 15px; 
+            font-weight: bold; 
+        }
+        .btn:hover { 
+            background-color: #2980b9; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Order Confirmation</h1>
+    <p>Thank you for your purchase! Your order has been successfully confirmed.</p>
+
+    <div class="order-details">
+        <p><strong>Order ID:</strong> <%= order._id %></p>
+        <p><strong>Order Date:</strong> <%= order.date %></p>
+        <p><strong>Course Name:</strong> <%= order.name %></p>
+        <p><strong>Order Total:</strong> $<%= typeof order.price === 'number' ? order.price.toFixed(2) : order.price %></p>
+    </div>
+
+    <p>If you have any questions about your order, feel free to <a href="mailto:support@example.com">contact our customer support</a>.</p>
+    
+    <a href="#" class="btn">View Your Order</a>
+
+    <div class="footer">
+        <p>Thank you for choosing our course!</p>
+        <p>&copy; 2024 Online Course, Inc. All rights reserved.</p>
+    </div>
 </body>
 </html>

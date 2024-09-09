@@ -1,3 +1,5 @@
+"use strict";
+
 import express from "express";
 import {
   registrationUser,
@@ -11,6 +13,8 @@ import {
   updateProfilePicture,
   updateUserPassword,
   getAllUsers,
+  updateUserRole,
+  deleteUser
 } from "../controllers/user.controller";
 import { isAutheticated, authorizeRoles } from "../middleware/auth";
 
@@ -37,5 +41,10 @@ userRouter.put("/update-user-password", isAutheticated, updateUserPassword);
 userRouter.put("/update-user-avatar", isAutheticated, updateProfilePicture);
 
 userRouter.get("/get-users", isAutheticated, authorizeRoles("admin"), getAllUsers);
+
+userRouter.put("/update-user", isAutheticated, authorizeRoles("admin"), updateUserRole);
+
+userRouter.delete("/delete-user/:id", isAutheticated, authorizeRoles("admin"), deleteUser);
+
 
 export default userRouter;

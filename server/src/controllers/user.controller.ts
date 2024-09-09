@@ -14,8 +14,12 @@ import {
   refreshTokenOptions,
   sendToken,
 } from "../utils/jwt";
-import { getUserById } from "../services/user.service";
-import { getAllUsersService } from "../services/user.service";
+import {
+  getUserById,
+  getAllUsersService,
+  updateUserRoleService,
+  deleteUserService,
+} from "../services/user.service";
 import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
 
@@ -245,7 +249,7 @@ export const updateAccessToken = CatchAsyncError(
         { id: user._id },
         process.env.ACCESS_TOKEN as string,
         {
-          expiresIn: "5m",
+          expiresIn: "3h",
         }
       );
       const refreshToken = jwt.sign(
@@ -425,3 +429,38 @@ export const getAllUsers = CatchAsyncError(
     }
   }
 );
+
+//Update users role -- only for admin
+export const updateUserRole = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id, role } = req.body;
+      updateUserRoleService(id, role, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+//delete user -- only for admin
+export const deleteUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+
+      const user = await userModel.findById(id);
+
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
+
+      await deleteUserService(id, res);
+
+      await redis.del(id);
+
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+

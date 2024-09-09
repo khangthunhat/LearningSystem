@@ -1,3 +1,5 @@
+"use strict";
+
 import { NextFunction, Request, response, Response } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -6,7 +8,11 @@ import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendEmail";
 import { redis } from "../utils/redis";
-import { createCourse, getAllCourseService } from "../services/course.service";
+import {
+  createCourse,
+  getAllCourseService,
+  deleteCourseService,
+} from "../services/course.service";
 import CourseModel from "../models/course.model";
 import mongoose from "mongoose";
 import NotificationModel from "../models/notification.model";
@@ -438,6 +444,24 @@ export const getAllCourses = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       getAllCourseService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+//delete course -- only for admin
+export const deleteCourse = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const course = await CourseModel.findById(id);
+      if (!course) {
+        return next(new ErrorHandler("Course not found", 404));
+      }
+      await deleteCourseService(id, res);
+      await redis.del(id);
+
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }

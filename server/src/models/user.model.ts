@@ -56,7 +56,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
     },
     courses: [
       {
-        coursesId: String,
+        courseId: String,
       },
     ],
   },
@@ -75,7 +75,7 @@ userSchema.pre<IUser>("save", async function (next) {
 //SignAccessToken
 userSchema.methods.SignAccessToken = function () {
   return jwt.sign({ id: this.id }, process.env.ACCESS_TOKEN || "",{
-    expiresIn:"5m", 
+    expiresIn:"3h", 
   });
 };
 

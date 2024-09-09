@@ -10,6 +10,7 @@ import {
   addReview,
   addReplyToReview,
   getAllCourses,
+  deleteCourse,
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 const courseRouter = express.Router();
@@ -47,5 +48,18 @@ courseRouter.put(
   addReplyToReview
 );
 
-courseRouter.get("/get-all-courses", isAutheticated, authorizeRoles("admin"), getAllCourses);
+courseRouter.get(
+  "/get-all-courses",
+  isAutheticated,
+  authorizeRoles("admin"),
+  getAllCourses
+);
+
+courseRouter.delete(
+  "/delete-course/:id",
+  isAutheticated,
+  authorizeRoles("admin"),
+  deleteCourse
+);
+
 export default courseRouter;

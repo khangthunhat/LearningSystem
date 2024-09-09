@@ -1,10 +1,10 @@
-import { timeStamp } from "console";
-import mongoose, { Document, Model, Schema } from "mongoose";
+import { Document } from 'mongoose';
+import mongoose, { Model, Schema } from "mongoose";
 
 export interface IOrder extends Document {
   courseId: string;
   userId: string;
-  paymentInfo: object;
+  paymentInfo: any;
 }
 
 const orderSchema = new Schema<IOrder>({
