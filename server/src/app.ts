@@ -11,6 +11,8 @@ import userRouter from "../src/routes/user.route";
 import courseRouter from "./routes/course.route";
 import orderRouter from "./routes/order.route";
 import notificationRouter from "./routes/notification.route";
+import analyticsRouter from "./routes/analytics.route";
+import layoutRouter from "./routes/layout.route";
 
 import instanceMongoDB from "./database/init.mongodb";
 import {
@@ -42,7 +44,15 @@ instanceMongoDB.connect();
 // countConectionDB();
 
 //routes
-app.use("/api/v1", userRouter, courseRouter, orderRouter, notificationRouter);
+app.use(
+  "/api/v1",
+  userRouter,
+  courseRouter,
+  orderRouter,
+  notificationRouter,
+  analyticsRouter,
+  layoutRouter
+);
 
 //error middleware
 app.use(ErrorMiddleware);

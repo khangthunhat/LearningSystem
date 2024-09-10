@@ -103,7 +103,7 @@ export const getSingleCourse = CatchAsyncError(
           return next(new ErrorHandler("Course not found", 404));
         }
 
-        await redis.set(courseId, JSON.stringify(course));
+        await redis.set(courseId, JSON.stringify(course), "EX", 604800); // 1 week
 
         res.status(200).json({
           success: true,
@@ -438,7 +438,6 @@ export const addReplyToReview = CatchAsyncError(
   }
 );
 
-
 //Get all course -- only for admin
 export const getAllCourses = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -461,7 +460,6 @@ export const deleteCourse = CatchAsyncError(
       }
       await deleteCourseService(id, res);
       await redis.del(id);
-
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
