@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export const navItemData = [
   {
-    name: "Giới thiệu",
-    href: "/about",
+    name: "Trang chủ",
+    href: "/",
   },
   {
     name: "Khoá học",
@@ -13,10 +13,6 @@ export const navItemData = [
   {
     name: "Tài liệu",
     href: "/policy",
-  },
-  {
-    name: "Bài viết",
-    href: "/blog",
   },
   {
     name: "FAQ",
@@ -39,9 +35,9 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
               <span
                 className={`${
                   activeItem === index
-                    ? " dark:text-[#37a39a] text-[crimson]"
+                    ? " dark:text-blue-400 text-red-500"
                     : "dark:text-white text-black"
-                }text-[18px] px-6 font-poppins font-[400] capitalize`}
+                }text-[18px] px-6 font-poppins font-[420] capitalize`}
               >
                 {i.name}
               </span>

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Learning Hub",
   description: "This is a learning hub for all the students",
   icons: {
-    icon: "/favicon.ico",
+    icon: "./favicon.ico",
   },
 };
 
