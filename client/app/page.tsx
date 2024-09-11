@@ -21,6 +21,7 @@ const Page:FC<Props> = (props) => {
          activeItem={activeItem}
          />
          <Hero/>
+         <Hero/>
       </div>
 
     );

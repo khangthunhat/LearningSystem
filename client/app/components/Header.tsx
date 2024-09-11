@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect, useCallback } from "react";
 import NavItems from "../utils/NavItems";
 import { ThemeSwitcher } from "../utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
@@ -16,32 +16,29 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 80) {
-        setActive(true);
-      } else {
-        setActive(false);
-      }
-    });
-  }
+  useEffect(() => {
+    const handleScroll = () => {
+      setActive(window.scrollY > 80);
+    };
 
-  const handleClose = (e: any) => {
-    if (e.target.id === "screen") {
-      {
-        setOpenSidebar(false);
-      }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleClose = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLElement && e.target.id === "screen") {
+      setOpenSidebar(false);
     }
-  };
+  }, []);
 
   return (
     <div className="w-full relative">
       <div
         className={`${
           active
-            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80px] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500 text-black dark:text-white"
-            : "w-full border-b dark:border-[#ffffff1c] h-[80px] z[80px] dark:shadow text-black dark:text-white"
-        }`}
+            ? "!bg-white dark:!bg-gray-900 fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500"
+            : "!bg-white dark:!bg-gray-900 w-full border-b dark:border-[#ffffff1c] h-[80px] z-[80] dark:shadow"
+        } text-black dark:text-white`}
       >
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
@@ -80,7 +77,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
             onClick={handleClose}
             id="screen"
           >
-            <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
+            <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 bg-opacity-100 dark:bg-opacity-100 top-0 right-0">
               <NavItems activeItem={activeItem} isMobile={true} />
               <HiOutlineUserCircle
                 size={25}
