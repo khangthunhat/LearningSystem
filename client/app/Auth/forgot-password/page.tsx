@@ -1,24 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import RegisterForm from '@/app/components/auth/RegisterForm'
+import React from 'react'
+import ForgotPasswordForm from '@/app/components/auth/ForgotPasswordForm'
 import Header from '@/app/components/Header'
 import Heading from '@/app/utils/Heading'
+import { useState } from 'react'
 
-const RegisterPage = () => {
+const ForgotPasswordPage = () => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
-  const [currentStep, setCurrentStep] = useState('register');
-
-  const handleSetRouter = (route: string) => {
-    setCurrentStep(route);
-  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <Heading 
-        title="Đăng ký"
-        description="This is a registration page for all the students" 
+        title="Quên mật khẩu"
+        description="Quên mật khẩu" 
         keywords="programming, coding, learning, hub, engineering, university, english, chinese" 
       />
       <Header 
@@ -27,10 +23,10 @@ const RegisterPage = () => {
         activeItem={activeItem}
       />
       <div className='mt-6 px-4 sm:px-6 lg:px-8'>
-        <RegisterForm setRouter={handleSetRouter} />
+        <ForgotPasswordForm />
       </div>
     </div>
   )
 }
 
-export default RegisterPage;
+export default ForgotPasswordPage

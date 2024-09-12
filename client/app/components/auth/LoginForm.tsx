@@ -22,6 +22,10 @@ const LoginPage = () => {
     router.push('/Auth/registation');
   };
 
+  const handleForgotPassword = () => {
+    router.push('/Auth/forgot-password');
+  };
+
   return (
     <div className="font-[sans-serif]">
       <div className="min-h-[70vh] flex flex-col items-center justify-center bg-white dark:bg-gray-900">
@@ -43,7 +47,7 @@ const LoginPage = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required 
                     className="w-full text-gray-800 dark:text-gray-200 text-sm border-b border-gray-300 dark:border-gray-700 focus:border-blue-600 bg-transparent px-2 py-3 outline-none" 
-                    placeholder="Enter email" 
+                    placeholder="Nhập email" 
                   />
                   <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 682.667 682.667">
                     <defs>
@@ -69,7 +73,7 @@ const LoginPage = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required 
                     className="w-full text-gray-800 dark:text-gray-200 text-sm border-b border-gray-300 dark:border-gray-700 focus:border-blue-600 bg-transparent px-2 py-3 outline-none" 
-                    placeholder="Enter password" 
+                    placeholder="Nhập mật khẩu" 
                   />
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
@@ -96,7 +100,7 @@ const LoginPage = () => {
                   </label>
                 </div>
                 <div>
-                  <a href="jajvascript:void(0);" className="text-blue-600 font-semibold text-sm hover:underline">
+                  <a onClick={handleForgotPassword} className="text-blue-600 font-semibold text-sm hover:underline">
                     Quên mật khẩu?
                   </a>
                 </div>
