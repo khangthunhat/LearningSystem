@@ -5,8 +5,6 @@ import RegisterForm from '@/app/components/auth/RegisterForm'
 import Header from '@/app/components/Header'
 import Heading from '@/app/utils/Heading'
 
-
-
 const RegisterPage = () => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
