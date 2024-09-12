@@ -5,16 +5,21 @@ import React, { FC, useState, useEffect, useCallback } from "react";
 import NavItems from "../utils/NavItems";
 import { ThemeSwitcher } from "../utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
+import { useRouter } from 'next/navigation';
+
 
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeItem: number;
+
 };
 
-const Header: FC<Props> = ({ activeItem, setOpen }) => {
+const Header: FC<Props> = ({ activeItem, setOpen}) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +35,10 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
       setOpenSidebar(false);
     }
   }, []);
+
+  const handleUserIconClick = () => {
+    router.push('/Auth/login');
+  };
 
   return (
     <div className="w-full relative">
@@ -65,7 +74,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
               <HiOutlineUserCircle
                 size={25}
                 className="hidden 800px:block cursor-pointer dark:text-white text-black"
-                onClick={() => setOpen(true)}
+                onClick={handleUserIconClick}
               />
             </div>
           </div>
@@ -93,8 +102,13 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
           </div>
         )}
       </div>
+
     </div>
+    
+    
   );
 };
+
+
 
 export default Header;

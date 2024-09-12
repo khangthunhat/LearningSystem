@@ -16,11 +16,12 @@ const josefin_sans = Josefin_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
   variable: "--font-josefin-sans",
 });
+
 export const metadata: Metadata = {
-  title: "Learning Hub",
+  title: "GoDoc | Học cùng Go",
   description: "This is a learning hub for all the students",
   icons: {
-    icon: "./favicon.ico",
+    icon: "./public/assets/icon1.png",
   },
 };
 
