@@ -75,7 +75,7 @@ export const registrationUser = CatchAsyncError(
 
       const isEmailExist = await userModel.findOne({ email });
       if (isEmailExist) {
-        return next(new ErrorHandler("Email already exists", 400));
+        return next(new ErrorHandler("Email này đã được sử dụng", 400));
       }
 
       const user: IRegistrationBody = {

@@ -1,5 +1,5 @@
 import { apiSlice } from "../api/apiSlice";
-import { userRegistration } from "./authSlice";
+import { userRegistration, userLoggedIn } from "./authSlice";
 
 type RegistrationResponse = {
   message: string;
@@ -17,36 +17,59 @@ export const authApi = apiSlice.injectEndpoints({
     //endpoint for user registration
     register: builder.mutation<RegistrationResponse, Registration>({
       query: (data) => ({
-        url: 'registration',
-        method: 'POST',
+        url: "registration",
+        method: "POST",
         body: data,
-        credentials: 'include' as const,
+        credentials: "include" as const,
       }),
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          dispatch(userRegistration({
-            token: result.data.activationToken,
-          }));
+          dispatch(
+            userRegistration({
+              token: result.data.activationToken,
+            })
+          );
         } catch (error) {
-          console.error('Error during registration:', error);
+          console.error("Error during registration:", error);
         }
       },
     }),
-    activate: builder.mutation<void, {activation_token: string, activation_code: string}>({
-      query: ({activation_token, activation_code}) => ({
-        url: 'activate-user',
-        method: 'POST',
+    activate: builder.mutation<
+      void,
+      { activation_token: string; activation_code: string }
+    >({
+      query: ({ activation_token, activation_code }) => ({
+        url: "activate-user",
+        method: "POST",
         body: {
           activation_token,
           activation_code,
         },
       }),
     }),
+    login: builder.mutation({
+      query: ({ email, password }) => ({
+        url: "login",
+        method: "POST",
+        body: { email, password },
+        credentials: "include" as const,
+      }),
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(
+            userLoggedIn({
+              accessToken: result.data.accessToken,
+              user: result.data.user,
+            })
+          );
+        } catch (error: any) {
+          console.error("Error during registration:", error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useRegisterMutation, useActivateMutation } = authApi;
-
-
-
+export const { useRegisterMutation, useActivateMutation, useLoginMutation } = authApi;

@@ -1,17 +1,38 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { userLoggedIn } from '../auth/authSlice'
 
 export const apiSlice = createApi({
     reducerPath: 'api', 
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_SERVER_URI }),
     endpoints: (builder) => ({
-        login: builder.mutation({
-            query: (body) => ({
-                url: '/login',
-                method: 'POST',
-                body
+        refreshToken: builder.query({
+            query: (data) => ({
+                url: 'refresh',
+                method: 'GET',
+                credentials: 'include' as const
             })
+        }),
+        loadUser: builder.query({
+            query: () => ({
+                url: 'me',
+                method: 'GET',
+                credentials: 'include' as const
+            }),
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                  const result = await queryFulfilled;
+                  dispatch(
+                    userLoggedIn({
+                      accessToken: result.data.accessToken,
+                      user: result.data.user,
+                    })
+                  );
+                } catch (error: any) {
+                  console.error("Error during registration:", error);
+                }
+              },
         })
     })
 })
 
-export const { useLoginMutation } = apiSlice
+export const { useRefreshTokenQuery, useLoadUserQuery, useLazyLoadUserQuery } = apiSlice

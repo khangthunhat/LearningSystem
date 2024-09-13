@@ -159,12 +159,13 @@ const RegisterPage: FC<Props> = ({ setRouter }) => {
                       <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                     </svg>
                   </div>
+                  {formik.touched.name && formik.errors.name && (
+                    <div className="text-red-500 text-xs mt-1">
+                      {formik.errors.name}
+                    </div>
+                  )}
                 </div>
-                {formik.touched.name && formik.errors.name && (
-                  <div className="text-red-500 text-xs mt-1">
-                    {formik.errors.name}
-                  </div>
-                )}
+
                 <div className="mb-6">
                   <label className="text-gray-800 dark:text-gray-200 text-xs block mb-2">
                     Email
@@ -218,12 +219,13 @@ const RegisterPage: FC<Props> = ({ setRouter }) => {
                       </g>
                     </svg>
                   </div>
+                  {formik.touched.email && formik.errors.email && (
+                    <div className="text-red-500 text-xs mt-1">
+                      {formik.errors.email}
+                    </div>
+                  )}
                 </div>
-                {formik.touched.email && formik.errors.email && (
-                  <div className="text-red-500 text-xs mt-1">
-                    {formik.errors.email}
-                  </div>
-                )}
+
                 <div className="mb-6">
                   <label className="text-gray-800 dark:text-gray-200 text-xs block mb-2">
                     Mật khẩu
@@ -341,8 +343,8 @@ const RegisterPage: FC<Props> = ({ setRouter }) => {
 
           <div className="md:h-full bg-[#000842] rounded-xl lg:p-12 p-8">
             <img
-              src="https://readymadeui.com/signin-image.webp"
-              className="w-full h-full object-contain"
+              src="https://res.cloudinary.com/degqcvmpr/image/upload/v1726219913/xtsr6hzw6gqekgw4egmc.webp"
+              className="w-full h-full object-contain "
               alt="login-image"
             />
           </div>

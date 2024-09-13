@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import ForgotPasswordForm from '@/app/components/auth/ForgotPasswordForm'
+import ForgotPasswordForm from '@/app/components/auth/ForgotPassword.Form'
 import Header from '@/app/components/Header'
 import Heading from '@/app/utils/Heading'
 import { useState } from 'react'
