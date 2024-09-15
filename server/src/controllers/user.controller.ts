@@ -68,6 +68,15 @@ interface IUpdateProfilePicture {
   avatar: string;
 }
 
+interface IForgetPassword {
+  email: string;
+}
+
+interface IResetPassword {
+  password: string;
+  reset_token: string;
+}
+
 export const registrationUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -241,7 +250,9 @@ export const updateAccessToken = CatchAsyncError(
 
       const session = await redis.get(decoded.id as string);
       if (!session) {
-        return next(new ErrorHandler('Please login to access this resource', 400));
+        return next(
+          new ErrorHandler("Please login to access this resource", 400)
+        );
       }
 
       const user = JSON.parse(session);
@@ -265,11 +276,11 @@ export const updateAccessToken = CatchAsyncError(
       res.cookie("access_token", accessToken, accessTokenOptions);
       res.cookie("refresh_token", refreshToken, refreshTokenOptions);
 
-      await redis.set(user._id as string, JSON.stringify(user), "EX", 604800 ); // 1 week
+      await redis.set(user._id as string, JSON.stringify(user), "EX", 604800); // 1 week
 
       res.status(200).json({
         start: "success",
-        accessToken, 
+        accessToken,
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
@@ -459,10 +470,82 @@ export const deleteUser = CatchAsyncError(
       await deleteUserService(id, res);
 
       await redis.del(id);
-
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
   }
 );
 
+//Forget password
+export const forgetPassword = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email } = req.body as IForgetPassword;
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
+
+      const resetPasswordSecret = process.env.RESET_PASSWORD_SECRET as string;
+      if (!resetPasswordSecret) {
+        return next(
+          new ErrorHandler("RESET_PASSWORD_SECRET is not defined", 500)
+        );
+      }
+
+      const resetToken = jwt.sign({ id: user._id }, resetPasswordSecret, {
+        expiresIn: "15m",
+      });
+      const resetPasswordUrl = `http://localhost:3000/reset-password/${resetToken}`;
+
+      const data = { user: { name: user.name }, resetPasswordUrl };
+      const html = await ejs.renderFile(
+        path.join(__dirname, "../mails/reset-password.ejs"),
+        data
+      );
+
+      await sendMail({
+        email: user.email,
+        subject: "Reset Password",
+        template: "reset-password.ejs",
+        data: {
+          user: { name: user.name },
+          resetPasswordUrl,
+        },
+      });
+      res.status(200).json({
+        success: true,
+        message: "Email sent successfully",
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+//Reset password
+export const resetPassword = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { password, reset_token } = req.body as IResetPassword;
+      const decoded = jwt.verify(
+        reset_token,
+        process.env.RESET_PASSWORD_SECRET as string
+      ) as JwtPayload;
+      const { id } = decoded;
+      const user = await userModel.findById(id);
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
+      user.password = password;
+      await user.save();
+      res.status(200).json({
+        success: true,
+        message: "Password reset successfully",
+        user,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);

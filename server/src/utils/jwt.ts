@@ -38,6 +38,7 @@ export  const refreshTokenOptions: ITokenOption = {
   };
 
 export const sendToken = (user: IUser, statusCode: number, res: Response) => {
+  
   const accessToken = user.SignAccessToken();
   const refreshToken = user.SignRefreshToken();
 

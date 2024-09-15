@@ -15,7 +15,7 @@ const ForgotPasswordForm = () => {
   };
 
   const handleLogin = () => {
-    router.push('/Auth/login');
+    router.push('/auth/login');
   };
 
   return (

@@ -64,11 +64,11 @@ const LoginPage: FC<Props> = () => {
     formik;
 
   const handleRegister = () => {
-    router.push("/Auth/registation");
+    router.push("/auth/registation");
   };
 
   const handleForgotPassword = () => {
-    router.push("/Auth/forgot-password");
+    router.push("/auth/forgot-password");
   };
 
   return (

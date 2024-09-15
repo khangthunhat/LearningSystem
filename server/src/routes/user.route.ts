@@ -14,7 +14,9 @@ import {
   updateUserPassword,
   getAllUsers,
   updateUserRole,
-  deleteUser
+  deleteUser,
+  forgetPassword,
+  resetPassword
 } from "../controllers/user.controller";
 import { isAutheticated, authorizeRoles } from "../middleware/auth";
 
@@ -46,5 +48,8 @@ userRouter.put("/update-user", isAutheticated, authorizeRoles("admin"), updateUs
 
 userRouter.delete("/delete-user/:id", isAutheticated, authorizeRoles("admin"), deleteUser);
 
+userRouter.post("/forget-password", forgetPassword);
+
+userRouter.post("/reset-password", resetPassword);
 
 export default userRouter;

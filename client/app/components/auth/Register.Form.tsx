@@ -109,7 +109,7 @@ const RegisterPage: FC<Props> = ({ setRouter }) => {
   });
 
   const handleLogin = () => {
-    router.push("/Auth/login");
+    router.push("/auth/login");
   };
 
   return (

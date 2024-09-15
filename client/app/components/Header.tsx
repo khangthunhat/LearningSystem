@@ -6,6 +6,7 @@ import NavItems from "../utils/NavItems";
 import { ThemeSwitcher } from "../utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen}) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const {user} = useSelector((state: any) => state.auth)
 
   const router = useRouter();
 
@@ -36,8 +38,10 @@ const Header: FC<Props> = ({ activeItem, setOpen}) => {
     }
   }, []);
 
+  
+
   const handleUserIconClick = () => {
-    router.push('/Auth/login');
+    router.push('/auth/login');
   };
 
   return (
