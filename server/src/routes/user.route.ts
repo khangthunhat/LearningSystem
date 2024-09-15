@@ -50,6 +50,6 @@ userRouter.delete("/delete-user/:id", isAutheticated, authorizeRoles("admin"), d
 
 userRouter.post("/forget-password", forgetPassword);
 
-userRouter.post("/reset-password", resetPassword);
+userRouter.put("/reset-password", resetPassword);
 
 export default userRouter;

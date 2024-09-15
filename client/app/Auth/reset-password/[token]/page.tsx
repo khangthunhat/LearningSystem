@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import ResetPasswordForm from '@/app/components/auth/resetPassword.Form'
+import ResetPasswordForm from '@/app/components/auth/ResetPassword.Form'
 import Header from '@/app/components/Header'
 import Heading from '@/app/utils/Heading'
 import { useState } from 'react'
@@ -9,6 +9,7 @@ import { useState } from 'react'
 const ResetPasswordPage = () => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
+  const [currentStep, setCurrentStep] = useState("forgotPassword");
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -23,7 +24,9 @@ const ResetPasswordPage = () => {
         activeItem={activeItem}
       />
       <div className='mt-6 px-4 sm:px-6 lg:px-8'>
-        <ResetPasswordForm />
+        <ResetPasswordForm 
+          
+        />
       </div>
     </div>
   )

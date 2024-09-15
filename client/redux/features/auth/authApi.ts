@@ -12,6 +12,15 @@ type Registration = {
   password: string;
 };
 
+type ForgotPassword = {
+    email: string;
+};
+
+type ForgotPasswordResponse = {
+    message: string;
+    reset_token: string;
+};
+
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     //endpoint for user registration
@@ -69,6 +78,7 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
     logout: builder.mutation({
       query: () => ({
         url: "logout",
@@ -84,19 +94,40 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    forgotPassword: builder.mutation({
-      query: ({ email }) => ({
-        url: "forgot-password",
+
+    forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPassword>({
+      query: (data) => ({
+        url: "forget-password",
         method: "POST",
-        body: { email },
+        body: data,
+        credentials: "include" as const,
       }),
+        async onQueryStarted(args, { queryFulfilled, dispatch }) {
+            try {
+            const result = await queryFulfilled;
+            console.log("Forgot password response:", result);
+            } catch (error: any) {
+            console.error("Error during registration:", error);
+            }
+        },
     }),
+
+
     resetPassword: builder.mutation({
       query: ({ reset_token, password }) => ({
         url: "reset-password",
-        method: "POST",
+        method: "PUT",
         body: { reset_token, password },
+        credentials: "include" as const,
       }),
+        async onQueryStarted(args, { queryFulfilled, dispatch }) {
+            try {
+            const result = await queryFulfilled;
+            console.log("Reset password response:", result);
+            } catch (error: any) {
+            console.error("Error during registration:", error);
+            }
+        },
     }),
   }),
 });

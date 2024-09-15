@@ -496,7 +496,7 @@ export const forgetPassword = CatchAsyncError(
       const resetToken = jwt.sign({ id: user._id }, resetPasswordSecret, {
         expiresIn: "15m",
       });
-      const resetPasswordUrl = `http://localhost:3000/reset-password/${resetToken}`;
+      const resetPasswordUrl = `http://localhost:3000/auth/reset-password/${resetToken}`;
 
       const data = { user: { name: user.name }, resetPasswordUrl };
       const html = await ejs.renderFile(
@@ -523,26 +523,39 @@ export const forgetPassword = CatchAsyncError(
   }
 );
 
-//Reset password
+// Reset password
 export const resetPassword = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { password, reset_token } = req.body as IResetPassword;
+
+      console.log(reset_token);
+      // Kiểm tra input
+      if (!password || password.length < 6) {
+        return next(new ErrorHandler("Mật khẩu phải có ít nhất 6 ký tự", 400));
+      }
+
       const decoded = jwt.verify(
         reset_token,
         process.env.RESET_PASSWORD_SECRET as string
       ) as JwtPayload;
+
       const { id } = decoded;
+
+      // Tìm người dùng
       const user = await userModel.findById(id);
+
       if (!user) {
-        return next(new ErrorHandler("User not found", 404));
+        return next(new ErrorHandler('Người dùng không tồn tại', 404));
       }
+
+      // Cập nhật mật khẩu (mật khẩu đã được băm tự động bởi middleware pre('save'))
       user.password = password;
-      await user.save();
+      await user.save(); 
+
       res.status(200).json({
         success: true,
-        message: "Password reset successfully",
-        user,
+        message: 'Đặt lại mật khẩu thành công',
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
