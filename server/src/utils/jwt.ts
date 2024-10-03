@@ -49,8 +49,6 @@ export const sendToken = (user: IUser, statusCode: number, res: Response) => {
     console.error("Redis Error:", error);
   }
 
-
-
   //only set secure to true in production
   if (process.env.NODE_ENV === "production") {
     accessTokenOptions.secure = true;

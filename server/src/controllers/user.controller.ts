@@ -22,6 +22,8 @@ import {
 } from "../services/user.service";
 import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
+import { Request as ExpressRequest } from 'express';
+import { Session, SessionData } from 'express-session';
 
 dotenv.config();
 
@@ -75,6 +77,10 @@ interface IForgetPassword {
 interface IResetPassword {
   password: string;
   reset_token: string;
+}
+
+interface RequestWithSession extends ExpressRequest {
+  session: Session & Partial<SessionData>;
 }
 
 export const registrationUser = CatchAsyncError(
@@ -221,8 +227,27 @@ export const logoutUser = CatchAsyncError(
     try {
       res.cookie("access_token", "", { maxAge: 1 });
       res.cookie("refresh_token", "", { maxAge: 1 });
-      const userId = req.user?._id || "";
-      redis.del(userId);
+      // const userId = req.user?._id || "";
+      // redis.del(userId);
+
+      // Xóa session từ Redis nếu có
+      const userId = req.user?._id;
+      if (userId) {
+        await redis.del(userId.toString());
+      }
+
+      // Xóa session cho đăng nhập qua mạng xã hội
+      if ((req as RequestWithSession).session) {
+        (req as RequestWithSession).session!.destroy((err: any) => {
+          if (err) {
+            console.error("Error destroying session:", err);
+          }
+        });
+      }
+
+      // Xóa thông tin người dùng từ request
+      delete req.user;
+
       res.status(200).json({
         success: true,
         message: "Logged out successfully",
@@ -546,16 +571,16 @@ export const resetPassword = CatchAsyncError(
       const user = await userModel.findById(id);
 
       if (!user) {
-        return next(new ErrorHandler('Người dùng không tồn tại', 404));
+        return next(new ErrorHandler("Người dùng không tồn tại", 404));
       }
 
       // Cập nhật mật khẩu (mật khẩu đã được băm tự động bởi middleware pre('save'))
       user.password = password;
-      await user.save(); 
+      await user.save();
 
       res.status(200).json({
         success: true,
-        message: 'Đặt lại mật khẩu thành công',
+        message: "Đặt lại mật khẩu thành công",
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));

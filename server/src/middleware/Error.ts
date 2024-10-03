@@ -3,6 +3,15 @@
 import ErrorHandler from "../utils/ErrorHandler";
 import { Request, Response, NextFunction } from "express";
 
+/**
+ * Centralized error handling middleware
+ * @param {Error} err - error object
+ * @param {Request} req - express request object
+ * @param {Response} res - express response object
+ * @param {NextFunction} next - express next function
+ *
+ * Handles different types of errors and sends a standardized error response
+ */
 export const ErrorMiddleware = (
   err: any,
   req: Request,

@@ -5,6 +5,7 @@ import ForgotPasswordForm from '@/app/components/auth/ForgotPassword.Form'
 import Header from '@/app/components/Header'
 import Heading from '@/app/utils/Heading'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const ForgotPasswordPage = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +24,7 @@ const ForgotPasswordPage = () => {
         activeItem={activeItem}
       />
       <div className='mt-6 px-4 sm:px-6 lg:px-8'>
-        <ForgotPasswordForm />
+        <ForgotPasswordForm setRouter={useRouter} />
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
+import { socialAuth } from './../../../../server/src/controllers/user.controller';
 import { apiSlice } from "../api/apiSlice";
 import { userRegistration, userLoggedIn, userLoggedOut } from "./authSlice";
 
@@ -78,19 +79,78 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-
-    logout: builder.mutation({
-      query: () => ({
-        url: "logout",
-        method: "GET",
+    socialAuth: builder.mutation({
+      query: ({email, name, avatar}) => ({
+        url: "social-auth",
+        method: "POST",
+        body: {
+          email,
+          name,
+          avatar,
+        },
         credentials: "include" as const,
       }),
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          dispatch(userLoggedOut());
+          const { accessToken, user } = result.data;
+
+          // Lưu token vào localStorage
+          localStorage.setItem('accessToken', accessToken);
+          
+          // Đánh dấu đây là đăng nhập social
+          localStorage.setItem('isSocialLogin', 'true');
+
+          // Dispatch action để cập nhật state
+          dispatch(
+            userLoggedIn({
+              accessToken,
+              user,
+            })
+          );
+
+          // Có thể thêm toast thông báo đăng nhập thành công ở đây
+          // toast.success("Đăng nhập thành công!");
+
         } catch (error: any) {
-          console.error("Error during registration:", error);
+          console.error("Lỗi khi đăng nhập social:", error);
+          // Có thể thêm xử lý lỗi cụ thể ở đây, ví dụ:
+          // if (error.status === 400) {
+          //   toast.error("Email đã được sử dụng.");
+          // } else {
+          //   toast.error("Đăng nhập thất bại. Vui lòng thử lại.");
+          // }
+        }
+      },
+    }),
+
+    logout: builder.mutation<{ success: boolean }, void>({
+      query: () => ({
+        url: "logout",
+        method: "POST",
+        credentials: "include" as const,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(userLoggedOut());
+          
+          // Clear all login-related data
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('isSocialLogin');
+          sessionStorage.clear();
+          
+          // Clear all cookies
+          document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+              .replace(/^ +/, "")
+              .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+          });
+
+          // Clear Redux store
+          dispatch(apiSlice.util.resetApiState());
+        } catch (error) {
+          console.error("Error during logout:", error);
         }
       },
     }),
@@ -104,10 +164,27 @@ export const authApi = apiSlice.injectEndpoints({
       }),
         async onQueryStarted(args, { queryFulfilled, dispatch }) {
             try {
-            const result = await queryFulfilled;
-            console.log("Forgot password response:", result);
+                await queryFulfilled;
+                
+                // Dispatch action để reset auth state
+                dispatch(userLoggedOut());
+                
+                // Xóa dữ liệu từ localStorage
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('isSocialLogin');
+                
+                // Xóa sessionStorage
+                sessionStorage.clear();
+                
+                // Xóa tất cả cookies
+                document.cookie.split(";").forEach((c) => {
+                    document.cookie = c
+                        .replace(/^ +/, "")
+                        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                });
             } catch (error: any) {
-            console.error("Error during registration:", error);
+                console.error("Lỗi khi đăng xuất:", error);
+                // Có thể dispatch một action để xử lý lỗi đăng xuất nếu cần
             }
         },
     }),
@@ -132,4 +209,40 @@ export const authApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useRegisterMutation, useActivateMutation, useLoginMutation, useLogoutMutation, useForgotPasswordMutation, useResetPasswordMutation } = authApi;
+export const { useRegisterMutation, useActivateMutation, useLoginMutation, useLogoutMutation, useForgotPasswordMutation, useResetPasswordMutation, useSocialAuthMutation } = authApi;
+
+// Hàm kiểm tra trạng thái đăng nhập
+export const checkAuthStatus = () => async (dispatch: any) => {
+  const accessToken = localStorage.getItem('accessToken');
+
+  if (accessToken) {
+    try {
+      const response = await fetch('/api/check-auth', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        dispatch(userLoggedIn({
+          accessToken,
+          user: userData
+        }));
+      } else {
+        // Nếu token không hợp lệ, xóa tất cả dữ liệu đăng nhập
+        dispatch(userLoggedOut());
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('isSocialLogin');
+      }
+    } catch (error) {
+      console.error("Lỗi khi kiểm tra trạng thái đăng nhập:", error);
+      dispatch(userLoggedOut());
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('isSocialLogin');
+    }
+  } else {
+    dispatch(userLoggedOut());
+  }
+};

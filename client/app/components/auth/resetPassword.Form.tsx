@@ -18,7 +18,7 @@ const schema = Yup.object().shape({
 
 const ResetPasswordPage: FC = () => {
   const router = useRouter();
-  const { token: reset_token } = useParams();
+  const { token: reset_token } = useParams() as { token: string };
 
   const [resetPassword, { isLoading, isSuccess, error , isError }] = useResetPasswordMutation();
 
@@ -63,13 +63,13 @@ const ResetPasswordPage: FC = () => {
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-8">
             <h3 className="text-gray-800 dark:text-white text-2xl font-bold">
-              Reset Password
+              Đặt lại mật khẩu
             </h3>
           </div>
 
           <div className="mb-6">
             <label htmlFor="password" className="text-gray-800 dark:text-gray-200 text-sm block mb-2">
-              New Password
+              Mật khẩu mới
             </label>
             <input
               type="password"
@@ -90,7 +90,7 @@ const ResetPasswordPage: FC = () => {
               htmlFor="confirmPassword"
               className="text-gray-800 dark:text-gray-200 text-sm block mb-2"
             >
-              Confirm Password
+              Nhập lại mật khẩu
             </label>
             <input
               type="password"
