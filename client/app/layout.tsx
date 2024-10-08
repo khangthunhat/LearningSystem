@@ -50,6 +50,7 @@ export default function RootLayout({
       >
         <Providers>
           <SessionProvider>
+            
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               
               <ClientSideCustom>{children}</ClientSideCustom>

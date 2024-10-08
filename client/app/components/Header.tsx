@@ -40,7 +40,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setActive(window.scrollY > 80);
+      setActive(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -73,11 +73,11 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
     }
   }, [data, user, socialAuth, isSuccess, loginNotified]);
 
-  const handleClose = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target instanceof HTMLElement && e.target.id === "screen") {
-      setOpenSidebar(false);
-    }
-  }, []);
+  // const handleClose = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  //   if (e.target instanceof HTMLElement && e.target.id === "screen") {
+  //     setOpenSidebar(false);
+  //   }
+  // }, []);
 
   const handleUserIconClick = () => {
     router.push("/auth/login");
@@ -114,7 +114,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
       localStorage.removeItem('user');
       
       toast.success("Đăng xuất thành công!");
-      window.location.reload();
+      // window.location.reload();
       // Chuyển hướng người dùng đến trang chủ hoặc trang đăng nhập
       router.push('/');
     } catch (error) {
