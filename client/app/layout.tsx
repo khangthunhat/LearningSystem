@@ -7,8 +7,10 @@ import { Poppins, Josefin_Sans } from "next/font/google";
 import { ThemeProvider } from "@/app/utils/theme-provider";
 import { Providers } from "@/app/provider";
 import { Toaster } from "react-hot-toast";
-
-
+import { SessionProvider } from "next-auth/react";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Loader from "./components/Loader/Loader";
+import dynamic from 'next/dynamic';
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -30,6 +32,14 @@ const josefin_sans = Josefin_Sans({
 //   },
 // };
 
+const Custom: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <>{children}</>;
+};
+
+const ClientSideCustom = dynamic(() => Promise.resolve(Custom), {
+  ssr: false,
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -39,12 +49,18 @@ export default function RootLayout({
         className={`${poppins.variable} ${josefin_sans.variable} !bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300 overflow-y-auto`}
       >
         <Providers>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-            <Toaster position="top-center" reverseOrder={false} />
-          </ThemeProvider>
+          <SessionProvider>
+            
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              
+              <ClientSideCustom>{children}</ClientSideCustom>
+              
+              <Toaster position="top-center" reverseOrder={false} />
+            </ThemeProvider>
+          
+          </SessionProvider>
         </Providers>
-        </body>
+      </body>
     </html>
   );
 }
