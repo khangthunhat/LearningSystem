@@ -60,6 +60,8 @@ const SidebarProfile: FC<Props> = ({
           </span>
         </div>
       ))}
+
+      
     </div>
   );
 };
