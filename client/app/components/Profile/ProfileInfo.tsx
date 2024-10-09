@@ -133,7 +133,7 @@ const ProfileInfo: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
               theme === "dark" ? "text-gray-400" : "text-gray-600"
             }`}
           >
-            Cập nhập thông tin
+            Cập nhập thông tin cá nhân
           </p>
         </div>
 
