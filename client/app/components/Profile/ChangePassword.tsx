@@ -8,17 +8,9 @@ type Props = {
   theme: string;
 };
 
-const ProfileInfo: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
+const ChangePassword: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
 
   return (
     <div className="w-full max-w-screen-xl mx-auto mt-10 lg:mt-20 lg:ml-10">
@@ -56,7 +48,7 @@ const ProfileInfo: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
               theme === "dark" ? "text-gray-400" : "text-gray-600"
             }`}
           >
-            Cập nhập thông tin cá nhân
+            Thay đổi mật khẩu
           </p>
         </div>
 
@@ -67,12 +59,10 @@ const ProfileInfo: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
               theme === "dark" ? "text-gray-200" : "text-gray-800"
             }`}
           >
-            Full Name
+            Mật khẩu cũ
           </label>
           <input
-            type="text"
-            value={name}
-            onChange={handleNameChange}
+            type="password"
             className={`mt-1 block w-full px-3 py-2 rounded-md ${
               theme === "dark"
                 ? "bg-gray-800 text-white border border-gray-600"
@@ -88,12 +78,10 @@ const ProfileInfo: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
               theme === "dark" ? "text-gray-200" : "text-gray-800"
             }`}
           >
-            Email
+            Mật khẩu mới
           </label>
           <input
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
+            type="password"
             className={`mt-1 block w-full px-3 py-2 rounded-md ${
               theme === "dark"
                 ? "bg-gray-800 text-white border border-gray-600"
@@ -111,7 +99,7 @@ const ProfileInfo: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
                 : "bg-indigo-500 hover:bg-indigo-600 text-white"
             }`}
           >
-            Cập nhật thông tin
+            Đổi mật khẩu
           </button>
         </div>
       </div>
@@ -119,4 +107,4 @@ const ProfileInfo: FC<Props> = ({ user, avatar: userAvatar, theme }) => {
   );
 };
 
-export default ProfileInfo;
+export default ChangePassword;

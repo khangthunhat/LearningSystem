@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import Image from "next/image";
 import avatarDefault from "../../../public/assets/default_avatar.png";
 import { RiLockPasswordLine, RiBookletLine, RiFileList3Line, RiLogoutBoxLine } from "react-icons/ri";
+
 type Props = {
   user: any;
   active: number;
